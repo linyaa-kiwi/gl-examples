@@ -1,4 +1,4 @@
-project(sync-control)
+project(GL_EXAMPLES)
 cmake_minimum_required(VERSION 2.8)
 
 # ------------------------------------------------------------------------------
