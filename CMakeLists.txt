@@ -26,6 +26,34 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # ------------------------------------------------------------------------------
+# Find libraries
+# ------------------------------------------------------------------------------
+
+function(local_find_library VAR NAME)
+    find_library("${VAR}" "${NAME}")
+
+    if("${VAR}")
+        message(STATUS "Library found: ${NAME}")
+    else("${VAR}")
+        message(STATUS "Library not found: ${NAME}")
+    endif("${VAR}")
+endfunction(local_find_library)
+
+local_find_library(LOCAL_GL_LIB GL)
+local_find_library(LOCAL_GLES2_LIB GLESv2)
+local_find_library(LOCAL_EGL_LIB EGL)
+
+local_find_library(LOCAL_X11_LIB X11)
+local_find_library(LOCAL_X11_xcb_LIB X11-xcb)
+local_find_library(LOCAL_xcb_LIB xcb)
+
+# ------------------------------------------------------------------------------
+# Add subdirectores
+# ------------------------------------------------------------------------------
+
+function(local_notify_build NAME)
+    message(STATUS "Will build target: ${NAME}")
+endfunction(local_notify_build)
 
 add_subdirectory(src)
 
