@@ -27,18 +27,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # ------------------------------------------------------------------------------
 
-set(COMMON_LIBRARIES
-    stdc++
-    X11
-    X11-xcb
-    xcb
-    EGL
-    )
-
-add_executable(create-x-egl-gl-surface src/examples/create-x-egl-gl-surface.cpp)
-target_link_libraries(create-x-egl-gl-surface ${COMMON_LIBRARIES})
-
-add_executable(create-x-egl-gles2-surface src/examples/create-x-egl-gles2-surface.cpp)
-target_link_libraries(create-x-egl-gles2-surface ${COMMON_LIBRARIES})
+add_subdirectory(src)
 
 # vim: et sw=4 tw=80:
