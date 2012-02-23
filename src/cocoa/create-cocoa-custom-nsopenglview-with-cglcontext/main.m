@@ -1,0 +1,84 @@
+// Copyright 2012 Chad Versace <chad@chad-versace.us>
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#import <Cocoa/Cocoa.h>
+#import <OpenGL/OpenGL.h>
+
+#import "common/MyGLView.h"
+#import "common/MyWindow.h"
+#import "common/create_window.h"
+
+static const int width = 800;
+static const int height = 600;
+
+static NSOpenGLContext*
+createGLContext() {
+    CGLError error;
+
+    CGLPixelFormatAttribute pixelAttrs[] = {
+        kCGLPFADoubleBuffer,
+        kCGLPFAOpenGLProfile, (int) kCGLOGLPVersion_3_2_Core,
+        kCGLPFAColorSize, 24,
+        kCGLPFAAlphaSize, 8,
+        kCGLPFADepthSize, 24,
+        kCGLPFAStencilSize, 8,
+        kCGLPFASampleBuffers, 0,
+        0,
+    };
+
+    int ignore;
+    CGLPixelFormatObj pixelFormat;
+    error = CGLChoosePixelFormat(pixelAttrs, &pixelFormat, &ignore);
+    assert(!error);
+    assert(pixelFormat);
+
+    CGLContextObj context;
+    error = CGLCreateContext(pixelFormat, NULL, &context);
+    assert(!error);
+    assert(context);
+
+    return [[NSOpenGLContext alloc] initWithCGLContextObj:context];
+}
+
+int
+main() {
+    // From the NSApplication Class Reference:
+    //     [...] if you do need to use Cocoa classes within the main()
+    //     function itself (other than to load nib files or to instantiate
+    //     NSApplication), you should create an autorelease pool before using
+    //     the classes and then release the pool when you’re done.
+    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+    // From the NSApplication Class Reference:
+    //     The sharedApplication class method initializes the display
+    //     environment and connects your program to the window server and the
+    //     display server.
+    //
+    // It also creates the singleton NSApp if it does not yet exist.
+    [NSApplication sharedApplication];
+
+    NSOpenGLContext *glContext = createGLContext();
+    MyGLView* glView = [[MyGLView alloc]
+                        initWithFrame:NSMakeRect(0, 0, width, height)
+                        glContext:glContext];
+    createWindow(glView);
+
+    [glContext makeCurrentContext];
+    [glContext setView:glView];
+    [glView display];
+    [NSApp run];
+    [pool drain];
+
+    return 0;
+}

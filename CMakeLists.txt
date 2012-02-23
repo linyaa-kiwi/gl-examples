@@ -47,6 +47,16 @@ local_find_library(LOCAL_X11_LIB X11)
 local_find_library(LOCAL_X11_xcb_LIB X11-xcb)
 local_find_library(LOCAL_xcb_LIB xcb)
 
+if(UNIX AND APPLE)
+    find_package(OpenGL REQUIRED)
+    find_library(COCOA_FRAMEWORK Cocoa REQUIRED)
+    find_library(IOKIT_FRAMEWORK IOKit REQUIRED)
+    find_library(CORE_FOUNDATION_FRAMEWORK CoreFoundation REQUIRED)
+
+    set(CMAKE_C_COMPILER "clang")
+    set(CMAKE_CXX_COMPILER "clang")
+endif(UNIX AND APPLE)
+
 # ------------------------------------------------------------------------------
 # Add subdirectores
 # ------------------------------------------------------------------------------
